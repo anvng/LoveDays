@@ -12,19 +12,54 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   late Person malePerson;
   late Person femalePerson;
-  late DateTime meetDate;
-  late int daysTogether;
+  DateTime meetDate = DateTime(2023, 4, 7);
+  int daysTogether = 0;
+
+  late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    malePerson = Person(name: 'An Dep', dateOfBirth: DateTime(2000, 5, 15));
-    femalePerson = Person(name: 'Hong Meo', dateOfBirth: DateTime(2000, 7, 10));
-    meetDate = DateTime(2023, 4, 7);
+    malePerson = Person(
+      name: '🌵 An Dep ♂️',
+      dateOfBirth: DateTime(2000, 5, 15),
+      firstDate: meetDate,
+    );
+    femalePerson = Person(
+      name: '🌷 Hong Meo ♀️',
+      dateOfBirth: DateTime(2000, 7, 10),
+      firstDate: meetDate,
+    );
     daysTogether = DateTime.now().difference(meetDate).inDays;
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+      lowerBound: 0.8,
+      upperBound: 1.2,
+    )..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _updatePerson(Person updatedPerson) {
+    setState(() {
+      if (updatedPerson.name == malePerson.name) {
+        malePerson = updatedPerson;
+      } else {
+        femalePerson = updatedPerson;
+      }
+      meetDate = updatedPerson.firstDate ?? meetDate;
+      daysTogether = DateTime.now().difference(meetDate).inDays;
+    });
   }
 
   @override
@@ -35,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: PageView(
         children: [
-          _buildHomePage(context, malePerson, femalePerson, daysTogether),
+          _buildHomePage(context),
           const DetailsScreen(),
           const MemoriesScreen(),
         ],
@@ -43,23 +78,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildHomePage(BuildContext context, Person malePerson,
-      Person femalePerson, int daysTogether) {
+  Widget _buildHomePage(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                  child: _buildPersonSection(context, malePerson, 'male.jpg')),
-              Expanded(
-                  child:
-                      _buildPersonSection(context, femalePerson, 'female.jpg')),
+              Expanded(child: _buildPersonSection(context, malePerson)),
+              Expanded(child: _buildPersonSection(context, femalePerson)),
             ],
           ),
           const SizedBox(height: 20),
-          _buildHeartbeatCircle(daysTogether),
+          _buildHeartbeatCircle(),
           const SizedBox(height: 20),
           QuoteCard(),
         ],
@@ -67,8 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildPersonSection(
-      BuildContext context, Person person, String imageName) {
+  Widget _buildPersonSection(BuildContext context, Person person) {
     return Container(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -81,21 +111,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (context) => EditScreen(person: person),
                 ),
               );
-
-              // Update the state with the new person data if it's not null
-              if (updatedPerson != null && updatedPerson is Person) {
-                setState(() {
-                  if (person.name == malePerson.name) {
-                    malePerson = updatedPerson;
-                  } else if (person.name == femalePerson.name) {
-                    femalePerson = updatedPerson;
-                  }
-                });
+              if (updatedPerson != null) {
+                _updatePerson(updatedPerson);
               }
             },
             child: ClipOval(
               child: Image.asset(
-                'lib/assets/images/$imageName',
+                'lib/assets/images/${person.name == malePerson.name ? "male.jpg" : "female.jpg"}',
                 width: 100,
                 height: 100,
                 fit: BoxFit.cover,
@@ -110,82 +132,61 @@ class _HomeScreenState extends State<HomeScreen> {
           Text('Age: ${person.age}', style: const TextStyle(fontSize: 16)),
           Text('Birth: ${_formatDate(person.dateOfBirth)}',
               style: const TextStyle(fontSize: 16)),
+          Text('First Date: ${_formatDate(person.firstDate)}',
+              style: const TextStyle(fontSize: 16)),
           Text('Zodiac: ${person.zodiacSign}',
               style: const TextStyle(fontSize: 16)),
-          Text('Numerology: ${person.numerology}',
-              style: const TextStyle(fontSize: 16)),
+          const SizedBox(height: 10),
         ],
       ),
     );
   }
 
-// Helper method to format the date
-  String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}'; // Format as DD/MM/YYYY
-  }
+  Widget _buildHeartbeatCircle() {
+    return GestureDetector(
+      onTap: () async {
+        DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: meetDate,
+          firstDate: DateTime(1900),
+          lastDate: DateTime.now(),
+        );
 
-  Widget _buildHeartbeatCircle(int daysTogether) {
-    return HeartbeatCircle(daysTogether: daysTogether);
-  }
-}
-
-class HeartbeatCircle extends StatefulWidget {
-  final int daysTogether;
-
-  const HeartbeatCircle({Key? key, required this.daysTogether})
-      : super(key: key);
-
-  @override
-  _HeartbeatCircleState createState() => _HeartbeatCircleState();
-}
-
-class _HeartbeatCircleState extends State<HeartbeatCircle>
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    )..repeat(reverse: true);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      child: Center(
-        child: ScaleTransition(
-          scale: CurvedAnimation(
-            parent: _controller,
-            curve: Curves.elasticInOut,
-          ),
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.pink,
-              shape: BoxShape.circle,
+        if (pickedDate != null) {
+          setState(() {
+            meetDate = pickedDate;
+            daysTogether = DateTime.now().difference(meetDate).inDays;
+            malePerson = malePerson.copyWith(firstDate: meetDate);
+            femalePerson = femalePerson.copyWith(firstDate: meetDate);
+          });
+        }
+      },
+      child: ScaleTransition(
+        scale: _controller,
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            const Icon(
+              Icons.favorite,
+              size: 200,
+              color: Colors.red,
             ),
-            padding: const EdgeInsets.all(60),
-            child: Text(
-              '${widget.daysTogether} Days',
+            Text(
+              '$daysTogether',
               style: const TextStyle(
-                color: Colors.white,
-                fontSize: 24,
+                fontSize: 40,
                 fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              textAlign: TextAlign.center,
             ),
-          ),
+          ],
         ),
       ),
     );
+  }
+
+  String _formatDate(DateTime? date) {
+    if (date == null) return 'N/A';
+    return '${date.day}/${date.month}/${date.year}';
   }
 }
