@@ -92,7 +92,8 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
   assets:
-    - lib/assets/images
+    - lib/assets/images/male.jpg
+    - lib/assets/images/female.jpg
 
 flutter_icons:
   android: true

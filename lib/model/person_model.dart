@@ -12,4 +12,6 @@ class Person {
     required this.name,
     required this.dateOfBirth,
   });
+
+  get imageName => null;
 }

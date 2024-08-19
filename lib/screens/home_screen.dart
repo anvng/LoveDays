@@ -70,14 +70,23 @@ class HomeScreen extends StatelessWidget {
                 ),
               );
             },
-            child: Image.asset('lib/assets/images/$imageName',
-                width: 100, height: 100),
+            child: ClipOval(
+              child: Image.asset(
+                'lib/assets/images/$imageName',
+                width: 100,
+                height: 100,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
+          const SizedBox(height: 10),
           Text(
             person.name,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           Text('Age: ${person.age}', style: const TextStyle(fontSize: 16)),
+          Text('Birth: ${_formatDate(person.dateOfBirth)}',
+              style: const TextStyle(fontSize: 16)),
           Text('Zodiac: ${person.zodiacSign}',
               style: const TextStyle(fontSize: 16)),
           Text('Numerology: ${person.numerology}',
@@ -85,6 +94,11 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+// Helper method to format the date
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}'; // Format as DD/MM/YYYY
   }
 
   Widget _buildHeartbeatCircle(int daysTogether) {
