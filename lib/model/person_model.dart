@@ -1,3 +1,5 @@
+import 'package:lovedays/utils/date_utils.dart';
+
 class Person {
   final String name;
   final DateTime dateOfBirth;
@@ -37,12 +39,10 @@ class Person {
   }
 
   String get zodiacSign {
-    // Example zodiac sign logic
-    return 'Taurus';
+    return getZodiacSign(dateOfBirth);
   }
 
   String get numerology {
-    // Example numerology logic
-    return '7';
+    return calculateNumerology(name, dateOfBirth);
   }
 }
