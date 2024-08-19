@@ -3,20 +3,32 @@ import 'package:lovedays/model/person_model.dart';
 import 'package:lovedays/widgets/quote_card.dart';
 import 'package:lovedays/screens/details_screen.dart';
 import 'package:lovedays/screens/memories_screen.dart';
-import 'package:lovedays/screens/edit_screen.dart'; // Import EditScreen
+import 'package:lovedays/screens/edit_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final Person malePerson =
-        Person(name: 'An Dep', dateOfBirth: DateTime(2000, 5, 15));
-    final Person femalePerson =
-        Person(name: 'Hong Meo', dateOfBirth: DateTime(2000, 7, 10));
-    final DateTime meetDate = DateTime(2023, 4, 7);
-    int daysTogether = DateTime.now().difference(meetDate).inDays;
+  _HomeScreenState createState() => _HomeScreenState();
+}
 
+class _HomeScreenState extends State<HomeScreen> {
+  late Person malePerson;
+  late Person femalePerson;
+  late DateTime meetDate;
+  late int daysTogether;
+
+  @override
+  void initState() {
+    super.initState();
+    malePerson = Person(name: 'An Dep', dateOfBirth: DateTime(2000, 5, 15));
+    femalePerson = Person(name: 'Hong Meo', dateOfBirth: DateTime(2000, 7, 10));
+    meetDate = DateTime(2023, 4, 7);
+    daysTogether = DateTime.now().difference(meetDate).inDays;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mede Day ❤️'),
@@ -62,13 +74,24 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              final updatedPerson = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => EditScreen(person: person),
                 ),
               );
+
+              // Update the state with the new person data if it's not null
+              if (updatedPerson != null && updatedPerson is Person) {
+                setState(() {
+                  if (person.name == malePerson.name) {
+                    malePerson = updatedPerson;
+                  } else if (person.name == femalePerson.name) {
+                    femalePerson = updatedPerson;
+                  }
+                });
+              }
             },
             child: ClipOval(
               child: Image.asset(
