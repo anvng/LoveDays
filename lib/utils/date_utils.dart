@@ -3,7 +3,7 @@ String getZodiacSign(DateTime dateOfBirth) {
   int month = dateOfBirth.month;
 
   if ((month == 1 && day >= 20) || (month == 2 && day <= 18)) {
-    return "Aquarius";
+    return "Aquarius ♒";
   } else if ((month == 2 && day >= 19) || (month == 3 && day <= 20)) {
     return "Pisces";
   } else if ((month == 3 && day >= 21) || (month == 4 && day <= 19)) {
@@ -25,7 +25,7 @@ String getZodiacSign(DateTime dateOfBirth) {
   } else if ((month == 11 && day >= 22) || (month == 12 && day <= 21)) {
     return "Sagittarius";
   } else if ((month == 12 && day >= 22) || (month == 1 && day <= 19)) {
-    return "Capricorn";
+    return "Capricorn ♑";
   } else {
     return "Unknown";
   }
