@@ -26,12 +26,12 @@ class _HomeScreenState extends State<HomeScreen>
     super.initState();
     malePerson = Person(
       name: '🌵 An Dep ♂️',
-      dateOfBirth: DateTime(2000, 5, 15),
+      dateOfBirth: DateTime(2002, 5, 9),
       firstDate: meetDate,
     );
     femalePerson = Person(
       name: '🌷 Hong Meo ♀️',
-      dateOfBirth: DateTime(2000, 7, 10),
+      dateOfBirth: DateTime(2002, 7, 23),
       firstDate: meetDate,
     );
     daysTogether = DateTime.now().difference(meetDate).inDays;
@@ -130,9 +130,9 @@ class _HomeScreenState extends State<HomeScreen>
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           Text('Age: ${person.age}', style: const TextStyle(fontSize: 16)),
-          Text('Birth: ${_formatDate(person.dateOfBirth)}',
+          Text('👼 ${_formatDate(person.dateOfBirth)}',
               style: const TextStyle(fontSize: 16)),
-          Text('First Date: ${_formatDate(person.firstDate)}',
+          Text('🗓️ ${_formatDate(person.firstDate)}',
               style: const TextStyle(fontSize: 16)),
           Text('Zodiac: ${person.zodiacSign}',
               style: const TextStyle(fontSize: 16)),
