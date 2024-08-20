@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lovedays/model/person_model.dart';
 import 'package:image_picker/image_picker.dart';
 
+
 class EditScreen extends StatefulWidget {
   final Person person;
 
@@ -103,7 +104,7 @@ class _EditScreenState extends State<EditScreen> {
                 radius: 50,
                 backgroundImage: _profileImagePath != null
                     ? FileImage(File(_profileImagePath!))
-                    : const AssetImage('lib/assets/images/default_profile.jpg')
+                    : const AssetImage('lib/assets/images/default_profile.png')
                         as ImageProvider,
               ),
             ),

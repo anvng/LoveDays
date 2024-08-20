@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lovedays/widgets/background_container.dart';
 import '../widgets/memory_card.dart';
 
 class MemoriesScreen extends StatefulWidget {
@@ -31,46 +32,48 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Memory Pictures'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _addMemoryImage,
-          ),
-        ],
-      ),
-      body: memoryImages.isEmpty
-          ? const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.photo, size: 60, color: Colors.grey),
-                    SizedBox(height: 20),
-                    Text(
-                      'No memories yet. Add some!',
-                      style: TextStyle(fontSize: 18, color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            )
-          : GridView.builder(
-              padding: const EdgeInsets.all(8.0),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-              ),
-              itemCount: memoryImages.length,
-              itemBuilder: (context, index) {
-                return MemoryCard(imagePath: memoryImages[index].path);
-              },
+    return BackgroundContainer(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Memory Pictures'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.add),
+              onPressed: _addMemoryImage,
             ),
+          ],
+        ),
+        body: memoryImages.isEmpty
+            ? const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.photo, size: 60, color: Colors.grey),
+                      SizedBox(height: 20),
+                      Text(
+                        'No memories yet. Add some!',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            : GridView.builder(
+                padding: const EdgeInsets.all(8.0),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                ),
+                itemCount: memoryImages.length,
+                itemBuilder: (context, index) {
+                  return MemoryCard(imagePath: memoryImages[index].path);
+                },
+              ),
+      ),
     );
   }
 }
