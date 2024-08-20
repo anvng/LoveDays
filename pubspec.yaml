@@ -94,6 +94,24 @@ flutter:
   assets:
     - lib/assets/images/male.jpg
     - lib/assets/images/female.jpg
+    - lib/assets/images/default_profile.png
+    - lib/assets/images/rose.jpg
+
+  fonts:
+    - family: SVNParisPro
+      fonts:
+        - asset: lib/assets/fonts/SVN_Paris_Pro.otf
+    - family: PlayfairDisplay
+      fonts:
+        - asset: lib/assets/fonts/PlayfairDisplay.ttf
+
+
+
+
+
+flutter_native_splash:
+  color: "#ffffff"
+  image: "lib/assets/images/icon.png"
 
 flutter_icons:
   android: true

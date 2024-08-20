@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lovedays/model/person_model.dart';
+import 'package:lovedays/widgets/background_container.dart';
 import 'package:lovedays/widgets/quote_card.dart';
 import 'package:lovedays/screens/details_screen.dart';
 import 'package:lovedays/screens/memories_screen.dart';
@@ -25,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     malePerson = Person(
-      name: '🌵 An Dep ♂️',
+      name: '🌵 An Dep ',
       dateOfBirth: DateTime(2002, 5, 9),
       firstDate: meetDate,
     );
@@ -64,16 +65,18 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Mede Day ❤️'),
-      ),
-      body: PageView(
-        children: [
-          _buildHomePage(context),
-          const DetailsScreen(),
-          const MemoriesScreen(),
-        ],
+    return BackgroundContainer(
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Mede Day ❤️'),
+        ),
+        body: PageView(
+          children: [
+            _buildHomePage(context),
+            const DetailsScreen(),
+            const MemoriesScreen(),
+          ],
+        ),
       ),
     );
   }
