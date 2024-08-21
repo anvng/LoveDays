@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen>
   void initState() {
     super.initState();
     malePerson = Person(
-      name: '🌵 An Dep ',
+      name: '🌵 An Dep ♂️',
       dateOfBirth: DateTime(2002, 5, 9),
       firstDate: meetDate,
     );
@@ -67,8 +67,11 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return BackgroundContainer(
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text('Mede Day ❤️'),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
         body: PageView(
           children: [

@@ -36,10 +36,12 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Memory Pictures'),
+          backgroundColor: Colors.transparent,
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: _addMemoryImage,
+              tooltip: 'Add Memory Picture',
             ),
           ],
         ),
