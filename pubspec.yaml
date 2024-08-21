@@ -95,7 +95,7 @@ flutter:
     - lib/assets/images/male.jpg
     - lib/assets/images/female.jpg
     - lib/assets/images/default_profile.png
-    - lib/assets/images/rose.jpg
+    - lib/assets/images/prod.jpg
 
   fonts:
     - family: SVNParisPro
@@ -104,9 +104,6 @@ flutter:
     - family: PlayfairDisplay
       fonts:
         - asset: lib/assets/fonts/PlayfairDisplay.ttf
-
-
-
 
 
 flutter_native_splash:
