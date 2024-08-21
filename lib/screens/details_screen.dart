@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lovedays/widgets/flip_clock_number.dart';
 import 'dart:async';
 
 class DetailsScreen extends StatefulWidget {
@@ -37,13 +38,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
     int weeks = (duration.inDays % 30) ~/ 7;
     int days = duration.inDays % 7;
 
-    String timeString = "${_currentTime.hour.toString().padLeft(2, '0')}:"
-        "${_currentTime.minute.toString().padLeft(2, '0')}:"
-        "${_currentTime.second.toString().padLeft(2, '0')}";
+    String hours = _currentTime.hour.toString().padLeft(2, '0');
+    String minutes = _currentTime.minute.toString().padLeft(2, '0');
+    String seconds = _currentTime.second.toString().padLeft(2, '0');
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         title: const Text('Detailed Breakdown'),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -55,8 +59,27 @@ class _DetailsScreenState extends State<DetailsScreen> {
             Text('Weeks: $weeks', style: const TextStyle(fontSize: 20)),
             Text('Days: $days', style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 20),
-            Text('Current Time: $timeString',
-                style: const TextStyle(fontSize: 20)),
+            Center(
+              child: FittedBox(
+                fit: BoxFit.scaleDown, // Adjust
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FlipClockNumber(value: hours.substring(0, 1)),
+                    const SizedBox(width: 4),
+                    FlipClockNumber(value: hours.substring(1, 2)),
+                    const Text(':', style: TextStyle(fontSize: 40)),
+                    FlipClockNumber(value: minutes.substring(0, 1)),
+                    const SizedBox(width: 4),
+                    FlipClockNumber(value: minutes.substring(1, 2)),
+                    const Text(':', style: TextStyle(fontSize: 40)),
+                    FlipClockNumber(value: seconds.substring(0, 1)),
+                    const SizedBox(width: 4),
+                    FlipClockNumber(value: seconds.substring(1, 2)),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

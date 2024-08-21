@@ -34,6 +34,7 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
   Widget build(BuildContext context) {
     return BackgroundContainer(
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text('Memory Pictures'),
           backgroundColor: Colors.transparent,
