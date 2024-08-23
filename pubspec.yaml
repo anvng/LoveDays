@@ -2,7 +2,7 @@ name: lovedays
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: '_none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -30,6 +30,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^0.13.4
+  shared_preferences: ^2.3.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -96,19 +98,21 @@ flutter:
     - lib/assets/images/female.jpg
     - lib/assets/images/default_profile.png
     - lib/assets/images/prod.jpg
+    - lib/assets/images/icon.png
+    - lib/assets/fonts/PlayfairDisplay_Regular.ttf
+
 
   fonts:
-    - family: SVNParisPro
+    - family: PlayfairDisplay_Regular
       fonts:
-        - asset: lib/assets/fonts/SVN_Paris_Pro.otf
-    - family: PlayfairDisplay
-      fonts:
-        - asset: lib/assets/fonts/PlayfairDisplay.ttf
+        - asset: lib/assets/fonts/PlayfairDisplay_Regular.ttf
 
 
 flutter_native_splash:
   color: "#ffffff"
   image: "lib/assets/images/icon.png"
+  android: true
+  ios: true
 
 flutter_icons:
   android: true
