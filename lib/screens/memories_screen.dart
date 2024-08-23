@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../widgets/background_container.dart';
@@ -11,16 +12,22 @@ class MemoriesScreen extends StatefulWidget {
 }
 
 class _MemoriesScreenState extends State<MemoriesScreen> {
-  List<XFile> memoryImages = [];
+  final List<Map<String, dynamic>> memoryImages = [];
   final ImagePicker picker = ImagePicker();
 
   Future<void> _addMemoryImage() async {
     try {
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
-        print('Selected image path: ${image.path}'); // Debug line
+        if (kDebugMode) {
+          print('Selected image path: ${image.path}');
+        }
         setState(() {
-          memoryImages.add(image);
+          memoryImages.insert(0, {
+            'imagePath': image.path,
+            'timeAdded': DateTime.now(),
+            'caption': '',
+          });
         });
       }
     } catch (e) {
@@ -28,6 +35,55 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
         SnackBar(content: Text('Error picking image: $e')),
       );
     }
+  }
+
+  void _editMemory(int index) async {
+    final XFile? pickedFile =
+        await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        memoryImages[index]['imagePath'] = pickedFile.path;
+        memoryImages[index]['timeAdded'] =
+            DateTime.now(); // Update the time to the current time
+      });
+    }
+  }
+
+  void _editCaption(int index) async {
+    String? newCaption =
+        await _showCaptionDialog(memoryImages[index]['caption']);
+    if (newCaption != null) {
+      setState(() {
+        memoryImages[index]['caption'] = newCaption;
+      });
+    }
+  }
+
+  Future<String?> _showCaptionDialog(String currentCaption) async {
+    TextEditingController controller =
+        TextEditingController(text: currentCaption);
+    return showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Edit Caption'),
+          content: TextField(
+            controller: controller,
+            decoration: const InputDecoration(hintText: 'Enter your caption'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(controller.text),
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -64,16 +120,17 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
                   ),
                 ),
               )
-            : GridView.builder(
+            : ListView.builder(
                 padding: const EdgeInsets.all(8.0),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8.0,
-                  mainAxisSpacing: 8.0,
-                ),
                 itemCount: memoryImages.length,
                 itemBuilder: (context, index) {
-                  return MemoryCard(imagePath: memoryImages[index].path);
+                  return MemoryCard(
+                    imagePath: memoryImages[index]['imagePath'],
+                    timeAdded: memoryImages[index]['timeAdded'],
+                    caption: memoryImages[index]['caption'],
+                    onEdit: () => _editMemory(index),
+                    onCaptionEdit: () => _editCaption(index),
+                  );
                 },
               ),
       ),

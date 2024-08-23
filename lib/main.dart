@@ -15,6 +15,7 @@ class LoveDayCounterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Love Day Counter',
       theme: ThemeData(
         primarySwatch: Colors.pink,
