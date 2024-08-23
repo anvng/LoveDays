@@ -10,7 +10,7 @@ void main() {
       'HomeScreen displays correct initial state and handles navigation',
       (WidgetTester tester) async {
     // Build the app and load the HomeScreen
-    await tester.pumpWidget(MaterialApp(home: HomeScreen()));
+    await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
 
     // Verify that the initial state of the screen is correct
     expect(find.text('Mede Day ❤️'), findsOneWidget); // AppBar title

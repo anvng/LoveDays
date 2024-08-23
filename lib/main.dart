@@ -18,7 +18,7 @@ class LoveDayCounterApp extends StatelessWidget {
       title: 'Love Day Counter',
       theme: ThemeData(
         primarySwatch: Colors.pink,
-        fontFamily: 'PlayfairDisplay',
+        fontFamily: 'PlayfairDisplay_Regular',
         textTheme: const TextTheme(
           bodyLarge: TextStyle(fontSize: 20.0),
           bodyMedium: TextStyle(fontSize: 18.0),

@@ -47,7 +47,7 @@ class FlipClockNumber extends StatelessWidget {
       width: 60,
       height: 80,
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 211, 20, 144),
+        color: const Color.fromARGB(255, 255, 25, 144),
         borderRadius: BorderRadius.circular(8),
       ),
       alignment: Alignment.center,

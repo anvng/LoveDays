@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:lovedays/widgets/background_container.dart';
+import '../widgets/background_container.dart';
 import '../widgets/memory_card.dart';
 
 class MemoriesScreen extends StatefulWidget {
@@ -18,12 +18,12 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
     try {
       final XFile? image = await picker.pickImage(source: ImageSource.gallery);
       if (image != null) {
+        print('Selected image path: ${image.path}'); // Debug line
         setState(() {
           memoryImages.add(image);
         });
       }
     } catch (e) {
-      // Handle errors or show a message to the user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error picking image: $e')),
       );
