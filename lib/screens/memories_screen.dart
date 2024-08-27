@@ -1,6 +1,9 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:lovedays/model/memory_model.dart';
+
 import '../widgets/background_container.dart';
 import '../widgets/memory_card.dart';
 
@@ -12,28 +15,26 @@ class MemoriesScreen extends StatefulWidget {
 }
 
 class _MemoriesScreenState extends State<MemoriesScreen> {
-  final List<Map<String, dynamic>> memoryImages = [];
+  late Box<Memory> memoryBox;
   final ImagePicker picker = ImagePicker();
 
+  @override
+  void initState() {
+    super.initState();
+    memoryBox = Hive.box<Memory>('memories');
+  }
+
   Future<void> _addMemoryImage() async {
-    try {
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        if (kDebugMode) {
-          print('Selected image path: ${image.path}');
-        }
-        setState(() {
-          memoryImages.insert(0, {
-            'imagePath': image.path,
-            'timeAdded': DateTime.now(),
-            'caption': '',
-          });
-        });
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      final newMemory = Memory(
+        imagePath: image.path,
+        caption: '',
+        timeAdded: DateTime.now(),
       );
+      setState(() {
+        memoryBox.add(newMemory);
+      });
     }
   }
 
@@ -41,21 +42,27 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
     final XFile? pickedFile =
         await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      setState(() {
-        memoryImages[index]['imagePath'] = pickedFile.path;
-        memoryImages[index]['timeAdded'] =
-            DateTime.now(); // Update the time to the current time
-      });
+      final memory = memoryBox.getAt(index);
+      if (memory != null) {
+        memory
+          ..imagePath = pickedFile.path
+          ..timeAdded = DateTime.now()
+          ..save();
+        setState(() {});
+      }
     }
   }
 
   void _editCaption(int index) async {
-    String? newCaption =
-        await _showCaptionDialog(memoryImages[index]['caption']);
-    if (newCaption != null) {
-      setState(() {
-        memoryImages[index]['caption'] = newCaption;
-      });
+    final memory = memoryBox.getAt(index);
+    if (memory != null) {
+      String? newCaption = await _showCaptionDialog(memory.caption);
+      if (newCaption != null) {
+        memory
+          ..caption = newCaption
+          ..save();
+        setState(() {});
+      }
     }
   }
 
@@ -102,7 +109,7 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
             ),
           ],
         ),
-        body: memoryImages.isEmpty
+        body: memoryBox.isEmpty
             ? const Center(
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
@@ -122,12 +129,13 @@ class _MemoriesScreenState extends State<MemoriesScreen> {
               )
             : ListView.builder(
                 padding: const EdgeInsets.all(8.0),
-                itemCount: memoryImages.length,
+                itemCount: memoryBox.length,
                 itemBuilder: (context, index) {
+                  final memory = memoryBox.getAt(index);
                   return MemoryCard(
-                    imagePath: memoryImages[index]['imagePath'],
-                    timeAdded: memoryImages[index]['timeAdded'],
-                    caption: memoryImages[index]['caption'],
+                    imagePath: memory!.imagePath,
+                    timeAdded: memory.timeAdded,
+                    caption: memory.caption,
                     onEdit: () => _editMemory(index),
                     onCaptionEdit: () => _editCaption(index),
                   );
