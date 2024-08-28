@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:lovedays/model/person_model.dart';
+import 'package:lovedays/screens/details_screen.dart';
+import 'package:lovedays/screens/edit_screen.dart';
+import 'package:lovedays/screens/memories_screen.dart';
 import 'package:lovedays/widgets/background_container.dart';
 import 'package:lovedays/widgets/quote_card.dart';
-import 'package:lovedays/screens/details_screen.dart';
-import 'package:lovedays/screens/memories_screen.dart';
-import 'package:lovedays/screens/edit_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -70,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen>
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: const Text('Mede Day ❤️'),
+          centerTitle: true,
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
